@@ -40,12 +40,15 @@ if ( ! defined( 'WPINC' ) ) {
  * @since    1.0.0
  */
 function run_wpchill_hdyhau() {
+	define( 'DLM_HDYHAU_FILE', __FILE__ );
+	define( 'DLM_HDYHAU_OPTIONS', array( 'YouTube', 'Google', 'WordPress Repository', 'Other' ) );
 
 	add_action( 'edd_checkout_form_top', 'wpchill_hdyhau_checkout_fields', 12 );
 	// add_filter( 'edd_payment_meta', 'wpchill_hdyhau_save_checkout_fields');
 	add_action( 'edd_insert_payment', 'wpchill_hdyhau_insert_payment', 10, 2 );
 	add_action( 'wp_footer', 'wpchill_hdyhau_output_js', 99 );
 	add_action( 'wp_head', 'wpchill_hdyhau_output_css' );
+	add_action( 'admin_init', 'wpchill_reports_page', 14 );
 
 }
 add_action( 'plugins_loaded', 'run_wpchill_hdyhau', 99 );
@@ -53,12 +56,7 @@ add_action( 'plugins_loaded', 'run_wpchill_hdyhau', 99 );
 
 function wpchill_hdyhau_checkout_fields(){
 
-	$options = array(
-		'YouTube',
-		'Google',
-		'WordPress Repository',
-		'Other'
-	);
+	$options = DLM_HDYHAU_OPTIONS;
 
 	?>
 	<div class="hdyhau-wrapper">
@@ -152,4 +150,24 @@ function wpchill_hdyhau_output_css(){
 	</style>
 
 	<?php
+}
+
+
+function wpchill_reports_page() {
+
+	if ( ! class_exists( 'Easy_Digital_Downloads' ) ) {
+		return;
+	}
+
+    global $wpdb;
+
+    $wpdb->edd_ordermeta = "{$wpdb->prefix}edd_ordermeta";
+
+
+    if ( ! class_exists( 'WPChill_EDD_Reports' ) ) {
+        require_once( 'classes/class-wpchill-edd-reports.php' );
+    }
+
+    new WPChill_EDD_Reports();
+
 }

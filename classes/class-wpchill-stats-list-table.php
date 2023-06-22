@@ -9,7 +9,7 @@ use EDD\Admin\List_Table;
  *
  * @since 3.0
  */
-class Sources_stats extends List_Table {
+class WPChill_Sources_Stats_List_Table extends List_Table {
 
 	/**
 	 * Get things started
@@ -73,20 +73,12 @@ class Sources_stats extends List_Table {
 	 */
 	public function get_data() {
         global $wpdb;
+        $wpdb->edd_ordermeta = "{$wpdb->prefix}edd_ordermeta";
 		$reports_data = array();
 		$sources      = DLM_HDYHAU_OPTIONS;
 
-		foreach ( $sources as $source_id => $source ) {
-			
-            $query = "SELECT COUNT(*) FROM $wpdb->edd_ordermeta WHERE meta_value = %s";
-            $count = $wpdb->get_var( $wpdb->prepare( $query, $source ) );
-
-			$reports_data[] = array(
-				'ID'           => $source_id,
-				'source_name'  => $source,
-				'source_count' => absint( $count ),
-			);
-		}
+		$query = "SELECT `meta_value` as ID, `meta_value` as source_name ,COUNT(`meta_value`) as source_count FROM $wpdb->edd_ordermeta WHERE `meta_key`='hdyhau-reason' GROUP BY `meta_value`";
+		$reports_data = $wpdb->get_results( $query, ARRAY_A );
 
 		return $reports_data;
 	}

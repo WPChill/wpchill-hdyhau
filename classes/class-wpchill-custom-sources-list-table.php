@@ -9,7 +9,7 @@ use EDD\Admin\List_Table;
  *
  * @since 3.0
  */
-class Custom_sources extends List_Table {
+class WPChill_Custom_Sources_List_Table extends List_Table {
 
 	/**
 	 * Get things started
@@ -72,21 +72,13 @@ class Custom_sources extends List_Table {
 	 */
 	public function get_data() {
         global $wpdb;
+        $wpdb->edd_ordermeta = "{$wpdb->prefix}edd_ordermeta";
 		$reports_data = array();
 		$sources      = DLM_HDYHAU_OPTIONS;
 		$placeholders = implode( ', ', array_fill( 0, count( $sources ), '%s' ) );
 
-		$query = "SELECT meta_id, meta_value FROM $wpdb->edd_ordermeta WHERE meta_value NOT IN ($placeholders)";
-		$sources = $wpdb->get_results( $wpdb->prepare( $query, $sources ), ARRAY_A  );
-
-		foreach ( $sources as $source ) {
-			
-			$reports_data[] = array(
-				'ID'           => $source['meta_id'],
-				'source'  => $source['meta_value'],
-			);
-		}
-
+		$query = "SELECT meta_id as ID, meta_value as source FROM $wpdb->edd_ordermeta WHERE meta_key='hdyhau-other'";
+		$reports_data = $wpdb->get_results( $wpdb->prepare( $query, $sources ), ARRAY_A  );
 		return $reports_data;
 	}
 

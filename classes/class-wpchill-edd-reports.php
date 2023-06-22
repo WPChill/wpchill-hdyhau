@@ -28,7 +28,7 @@ class WPChill_EDD_Reports{
 			'sources_count_chart',
 		);
 
-		$reports->add_report( 'test123', array(
+		$reports->add_report( 'wpchill-hdyhau', array(
 			'label'     => __( 'Sources Stats & Count', 'easy-digital-downloads' ),
 			'icon'      => 'image-filter',
 			'priority'  => 20,
@@ -44,7 +44,7 @@ class WPChill_EDD_Reports{
 			'views' => array(
 				'table' => array(
 					'display_args' => array(
-						'class_name' => 'Sources_stats',
+						'class_name' => 'WPChill_Sources_Stats_List_Table',
 						'class_file' => plugin_dir_path( DLM_HDYHAU_FILE ) . 'classes/class-wpchill-stats-list-table.php',
 					),
 				),
@@ -56,7 +56,7 @@ class WPChill_EDD_Reports{
 			'views' => array(
 				'table' => array(
 					'display_args' => array(
-						'class_name' => 'Custom_sources',
+						'class_name' => 'WPChill_Custom_Sources_List_Table',
 						'class_file' => plugin_dir_path( DLM_HDYHAU_FILE ) . 'classes/class-wpchill-custom-sources-list-table.php',
 					),
 				),
@@ -99,16 +99,11 @@ class WPChill_EDD_Reports{
 
 	public function get_sources_data() {
 		global $wpdb;
-		$reports_data = array();
-		$sources      = DLM_HDYHAU_OPTIONS;
+		$wpdb->edd_ordermeta = "{$wpdb->prefix}edd_ordermeta";
 
-		foreach ( $sources as $source_id => $source ) {
-			
-			$query = "SELECT COUNT(*) FROM $wpdb->edd_ordermeta WHERE meta_value = %s";
-			$count = $wpdb->get_var( $wpdb->prepare( $query, $source ) );
-
-			$reports_data[$source] =  absint( $count );
-		}
+		$query = "SELECT `meta_value` ,COUNT(`meta_value`) as count FROM $wpdb->edd_ordermeta WHERE `meta_key`='hdyhau-reason' GROUP BY `meta_value`";
+		$count = $wpdb->get_results( $query, ARRAY_A );
+		$reports_data = wp_list_pluck( $count, 'count', 'meta_value' );
 
 		return $reports_data;
 	}

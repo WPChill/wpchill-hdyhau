@@ -45,6 +45,8 @@ function run_wpchill_hdyhau() {
 
 	add_action( 'edd_checkout_form_top', 'wpchill_hdyhau_checkout_fields', 12 );
 	add_action( 'edd_insert_payment', 'wpchill_hdyhau_insert_payment', 10, 2 );
+	
+	add_action( 'edd_purchase_form', 'wpchill_hdyhau_checkout_fields', 12 );
 	add_action( 'wp_footer', 'wpchill_hdyhau_output_js', 99 );
 	add_action( 'wp_head', 'wpchill_hdyhau_output_css' );
 	add_action( 'admin_init', 'wpchill_reports_page', 14 );
@@ -55,14 +57,14 @@ add_action( 'plugins_loaded', 'run_wpchill_hdyhau', 99 );
 
 function wpchill_hdyhau_checkout_fields(){
 
-	$options = DLM_HDYHAU_OPTIONS;
+	$options = array( 'YouTube' => 'YouTube', 'Google' => 'Search Engine', 'WordPress Repository' => 'WordPress Repository', 'Other' => 'Other' );
 
 	?>
 	<div class="hdyhau-wrapper">
 		<p>How Did You Hear About Us ?</p>
 		<div class="radio">
-			<?php foreach ( $options as $option ) {
-				echo '<label><input type="radio" value="' . esc_attr( $option ) . '" name="hdyhau-reason">' . esc_html( $option ) . '</label>';
+			<?php foreach ( $options as $key => $option ) {
+				echo '<label><input type="radio" value="' . esc_attr( $key ) . '" name="hdyhau-reason">' . esc_html( $option ) . '</label>';
 			} ?>
 		</div>
 		<div class="hdyhau-reason-other" style="display: none">

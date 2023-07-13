@@ -77,8 +77,8 @@ class WPChill_Custom_Sources_List_Table extends List_Table {
 		$sources      = DLM_HDYHAU_OPTIONS;
 		$placeholders = implode( ', ', array_fill( 0, count( $sources ), '%s' ) );
 
-		$query = "SELECT meta_id as ID, meta_value as source FROM $wpdb->edd_ordermeta WHERE meta_key='hdyhau-other'";
-		$reports_data = $wpdb->get_results( $wpdb->prepare( $query, $sources ), ARRAY_A  );
+		$query = "SELECT meta_id as ID, meta_value as source FROM $wpdb->edd_ordermeta WHERE meta_key='hdyhau-other' LIMIT 9999999999";
+		$reports_data = $wpdb->get_results( $query, ARRAY_A );
 		return $reports_data;
 	}
 

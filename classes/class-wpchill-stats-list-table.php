@@ -77,7 +77,7 @@ class WPChill_Sources_Stats_List_Table extends List_Table {
 		$reports_data = array();
 		$sources      = DLM_HDYHAU_OPTIONS;
 
-		$query = "SELECT `meta_value` as ID, `meta_value` as source_name ,COUNT(`meta_value`) as source_count FROM $wpdb->edd_ordermeta WHERE `meta_key`='hdyhau-reason' GROUP BY `meta_value`";
+		$query = "SELECT `meta_value` as ID, `meta_value` as source_name ,COUNT(`meta_value`) as source_count FROM $wpdb->edd_ordermeta WHERE `meta_key`='hdyhau-reason' GROUP BY `meta_value` ORDER BY source_count DESC";
 		$reports_data = $wpdb->get_results( $query, ARRAY_A );
 
 		return $reports_data;

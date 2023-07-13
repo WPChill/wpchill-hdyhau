@@ -72,7 +72,7 @@ class WPChill_EDD_Reports{
 						$sources = $this->get_sources_data();
 
 						return array(
-							'sales' => array_values( $sources  ),
+							'sales' => array_values( $sources ),
 						);
 					},
 					'type' => 'pie',
@@ -105,7 +105,7 @@ class WPChill_EDD_Reports{
 		$count = $wpdb->get_results( $query, ARRAY_A );
 		$reports_data = wp_list_pluck( $count, 'count', 'meta_value' );
 
-		return $reports_data;
+		return array_map( 'absint', $reports_data );
 	}
 
 }
